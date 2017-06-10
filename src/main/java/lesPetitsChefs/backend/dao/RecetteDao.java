@@ -48,16 +48,19 @@ public class RecetteDao {
 			findQuery = new Document();
 		}
 		
+		//call to base
 		System.out.println(findQuery);
 		ArrayList<Recette> listeRecette = new ArrayList<Recette>();
 		List<Document> recettes = (List<Document>) MongoConnect.collectionRecette.find(findQuery).into(
 				new ArrayList<Document>());
+		
+		//Get data	
 		for (Document recette : recettes) {
 			
 			Recette r = new Recette(recette.getString("nom"),recette.getString("type"), recette.getString("typeSecondaire")
 					,recette.getString("tempsCuissons"),recette.getString("tempsPreparation"));
 			
-			//récupère la liste des ingredients
+			//get the ingredients list
 			List<Ingredient> listeIngredient = new ArrayList<Ingredient>();
 			List<Document> ingredientsDocument = (List<Document>) recette.get("listeIngredient");
 			if(ingredientsDocument != null){
@@ -68,7 +71,7 @@ public class RecetteDao {
 				r.setListeIngredient(listeIngredient);
 			}
 			
-			//récupère la liste des instructions
+			//get the instructions list
 			List<Instruction> listeInstruction = new ArrayList<Instruction>();
 			List<Document> instructionsDocument = (List<Document>) recette.get("listeInstruction");
 			if(instructionsDocument != null){
