@@ -36,7 +36,18 @@ public class RecetteDao {
 	
 	public List<Recette> getRecetteByTypePrincipalAndTypeSecondaire(String typePrincipal, String typeSecondaire){
 		
-		Document findQuery = new Document("type",typePrincipal).append("typeSecondaire", typeSecondaire);
+		Document findQuery;
+		//url /recettes/typePrincipal
+		if(typeSecondaire == null && typePrincipal != null){
+			findQuery = new Document("type",typePrincipal);
+		//url /recettes/typePrincipal/typeSecondaire
+		}else if(typePrincipal != null && typeSecondaire != null){
+			findQuery = new Document("type",typePrincipal).append("typeSecondaire", typeSecondaire);
+		//url /recettes
+		}else{
+			findQuery = new Document();
+		}
+		
 		System.out.println(findQuery);
 		ArrayList<Recette> listeRecette = new ArrayList<Recette>();
 		List<Document> recettes = (List<Document>) MongoConnect.collectionRecette.find(findQuery).into(

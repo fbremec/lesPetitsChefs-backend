@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -41,17 +42,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class RecetteController {
 	
 		private final RecetteDao recetteDao = new RecetteDao();
-	
+		
+		@RequestMapping(value={"", "/{typePrincipal}","/{typePrincipal}/{typeSecondaire}"},method = RequestMethod.GET, produces = {"application/json" })
+		private ResponseEntity<?> getRecetteByTypePrincipalAndTypeSecondaire(@PathVariable(value="typePrincipal",required=false) String typePrincipal,
+				@PathVariable(value = "typeSecondaire", required=false) String typeSecondaire){
+			List<Recette> liste = this.recetteDao.getRecetteByTypePrincipalAndTypeSecondaire(typePrincipal, typeSecondaire);
+			return new ResponseEntity<List<Recette>> (liste, HttpStatus.OK);
+		}
+		
 		@RequestMapping(value="",method = RequestMethod.POST, produces = {"application/json" })
 		private ResponseEntity<?> postAppertifs(@RequestBody Recette recetteRequest){
-							
-			System.out.println(recetteRequest.getType());
-			try{
 				this.recetteDao.addRecette(recetteRequest);
 				return new ResponseEntity (HttpStatus.OK);
-			}catch (Exception e) {
-				return new ResponseEntity<Exception> (e,HttpStatus.OK);
-			}
 		}
 		
 		
