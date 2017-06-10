@@ -12,7 +12,7 @@ import com.mongodb.client.MongoCursor;
 import lesPetitsChefs.backend.model.Ingredient;
 import lesPetitsChefs.backend.model.Instruction;
 import lesPetitsChefs.backend.model.Recette;
-import lesPetitsChefs.backend.mongoDB.MongoConnect;
+import lesPetitsChefs.backend.util.MongoConnect;
 
 public class RecetteDao {
 	

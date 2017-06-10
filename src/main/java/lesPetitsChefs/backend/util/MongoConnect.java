@@ -1,4 +1,4 @@
-package lesPetitsChefs.backend.mongoDB;
+package lesPetitsChefs.backend.util;
 
 import org.bson.Document;
 

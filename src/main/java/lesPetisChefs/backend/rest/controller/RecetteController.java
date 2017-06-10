@@ -33,7 +33,7 @@ import com.mongodb.util.JSON;
 
 import lesPetitsChefs.backend.dao.RecetteDao;
 import lesPetitsChefs.backend.model.Recette;
-import lesPetitsChefs.backend.mongoDB.MongoConnect;
+import lesPetitsChefs.backend.util.MongoConnect;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -43,6 +43,12 @@ public class RecetteController {
 	
 		private final RecetteDao recetteDao = new RecetteDao();
 		
+		/**
+		 * Request which return the recettes or recettes by type principal or recettes by type principal and secondaire
+		 * @param typePrincipal
+		 * @param typeSecondaire
+		 * @return list of recettes
+		 */
 		@RequestMapping(value={"", "/{typePrincipal}","/{typePrincipal}/{typeSecondaire}"},method = RequestMethod.GET, produces = {"application/json" })
 		private ResponseEntity<?> getRecetteByTypePrincipalAndTypeSecondaire(@PathVariable(value="typePrincipal",required=false) String typePrincipal,
 				@PathVariable(value = "typeSecondaire", required=false) String typeSecondaire){
@@ -50,6 +56,11 @@ public class RecetteController {
 			return new ResponseEntity<List<Recette>> (liste, HttpStatus.OK);
 		}
 		
+		/**
+		 * Request to add Recette
+		 * @param recetteRequest
+		 * @return Status Ok if add okay
+		 */
 		@RequestMapping(value="",method = RequestMethod.POST, produces = {"application/json" })
 		private ResponseEntity<?> postAppertifs(@RequestBody Recette recetteRequest){
 				this.recetteDao.addRecette(recetteRequest);
