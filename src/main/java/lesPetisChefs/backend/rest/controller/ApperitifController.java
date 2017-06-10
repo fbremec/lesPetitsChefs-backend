@@ -30,53 +30,27 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;
 
+import lesPetitsChefs.backend.dao.RecetteDao;
+import lesPetitsChefs.backend.model.Recette;
+import lesPetitsChefs.backend.mongoDB.MongoConnect;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/apperitifs", produces = { APPLICATION_JSON_VALUE })
 public class ApperitifController {
 	
-		 MongoClientURI uri  = new MongoClientURI("mongodb://user1:root@ds145148.mlab.com:45148/lespetitschefs"); 
-	     MongoClient client = new MongoClient(uri);
-	     MongoDatabase db = client.getDatabase(uri.getDatabase());
-	     MongoCollection<Document> coll = db.getCollection("recettes");
+		private final String typePrincipal = "appéritif";
+		private final RecetteDao recetteDao = new RecetteDao();
 	
 		@RequestMapping(value="/soupes",method = RequestMethod.GET, produces = {"application/json" })
-		private ResponseEntity<?> getMessagesBetweenContacts(){
+		private ResponseEntity<?> getSoupes(){
 			
-			Document findQuery = new Document("typeSecondaire", "soupe");
-
-	        MongoCursor<Document> cursor = coll.find(findQuery).iterator();
-			ArrayList<Document> listeSoupe = new ArrayList<Document>();
-			try {
-				while(cursor.hasNext()) {
-
-					listeSoupe.add(cursor.next());
-				 }
-			} finally {
-			   cursor.close();
-			}
-			return new ResponseEntity<ArrayList<Document>> (listeSoupe, HttpStatus.OK);
-
+			List<Recette> liste = this.recetteDao.getRecetteByTypePrincipalAndTypeSecondaire(this.typePrincipal, "soupe");
+			return new ResponseEntity<List<Recette>> (liste, HttpStatus.OK);
 		}
 		
-		/*@RequestMapping(value="/",method = RequestMethod.POST, produces = {"application/json" })
-		private ResponseEntity<?> postAppertifs(@RequestBody String request){
-								
-				BasicDBObject doc = new BasicDBObject();
-				
-			    JSONObject jsonObj = new JSONObject(request);
 
-			    Iterator<?> keys = jsonObj.keys();
-
-			    while( keys.hasNext() ) {
-			        String key = (String)keys.next();
-			        System.out.println(jsonObj.get(key) );
-			       doc.append(key, jsonObj.get(key));
-			    }
-			    collectionRecette.insert(doc);
-				return null;
-		}*/
 		
 		
 
